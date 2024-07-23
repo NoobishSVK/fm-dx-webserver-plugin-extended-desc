@@ -1,5 +1,5 @@
 # FM-DX Webserver Extended Description Plugin
-Plugin that shows weather, suitable for **FM-DX Webserver 1.2.5** or newer.
+Plugin that adds extended description with rich text editing features. Suitable for **FM-DX Webserver 1.2.5** or newer.
 
 ![Extended description showcase](https://github.com/user-attachments/assets/e6487ef9-c3e4-49bb-b46f-d12ef6ce0201)
 
