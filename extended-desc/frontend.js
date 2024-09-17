@@ -4,10 +4,6 @@
  * ************************************************
  * Created by NoobishSVK
  * Join our Discord: https://discord.gg/fmdx
- * 
- * https://github.com/Highpoint2000/Extended-Description-plugin-MOD-by-Highpoint-
- *
- *
  * ************************************************
  *
  * This script extends the functionality of the FM-DX 
@@ -55,7 +51,6 @@ const extendedDescButton = $('<button>', {
         width: '100px',
         position: 'relative',
         marginTop: '16px',
-		
         right: '0px'
     }
 });
@@ -98,31 +93,29 @@ const extendedDescModal = $('<div>', {
 });
 
 function ExtendedDescInitialize() {
-	
-	const extendedDescContent = $('<div class="extended-desc-content text-left" style="overflow: auto; max-height: 380px; padding: 20px; border-bottom: 1px var(--color-4) dashed"></div>');
+    const extendedDescContent = $('<div class="extended-desc-content text-left" style="overflow: auto; max-height: 380px; padding: 20px; border-bottom: 1px var(--color-4) dashed"></div>');
     extendedDescModal.append(extendedDescContent);
     extendedDescContent.html(eDesc.parseMarkdown(INFO_CONTENT));
     extendedDescModal.append(extendedDescCloseButton);
     $('.modal').append(extendedDescModal);
-	
-    setTimeout(() => {
-        const buttonWrapper = document.getElementById('button-wrapper');
-        if (buttonWrapper) {
-			extendedDescButton.css('margin-left', '5px');
-            buttonWrapper.appendChild(extendedDescButton[0]);
+    
+    setTimeout(function() {
+        const buttonWrapper = $('#button-wrapper');
+        if (buttonWrapper.length) {
+            extendedDescButton.css('margin-left', '5px');
+            buttonWrapper.append(extendedDescButton);
         } else {
-			wrapperElement = $('.tuner-info');
-			if (wrapperElement.length) {
-				const buttonWrapper = $('<div>').addClass('button-wrapper');
-				buttonWrapper.append(extendedDescButton);
-				wrapperElement.append(buttonWrapper);
-				const emptyLine = document.createElement('br');
-				wrapperElement.append(emptyLine);
-			}
-		}	 
+            const wrapperElement = $('.tuner-info');
+            if (wrapperElement.length) {
+                const buttonWrapper = $('<div>').addClass('button-wrapper');
+                buttonWrapper.append(extendedDescButton);
+                wrapperElement.append(buttonWrapper);
+                const emptyLine = $('<br>');
+                wrapperElement.append(emptyLine);
+            }
+        }
     }, 1000); // 1000 milliseconds = 1 second
 }
-
 
 /* HELPERS */
 function ExtendedDescOpenModal(panel) {
@@ -132,7 +125,7 @@ function ExtendedDescOpenModal(panel) {
 
 function ExtendedDescCloseModal(panel) {
     panel.css("opacity", 0);
-    setTimeout(() => {
+    setTimeout(function() {
         panel.hide();
         eDesc.modalWindow.hide();
     }, 300);
