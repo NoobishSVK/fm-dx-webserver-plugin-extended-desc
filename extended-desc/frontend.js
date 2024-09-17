@@ -1,14 +1,18 @@
 /*!
  * ************************************************
- * FM-DX Webserver Extended Description plugin
+ * FM-DX Webserver Extended Description plugin 
  * ************************************************
  * Created by NoobishSVK
  * Join our Discord: https://discord.gg/fmdx
+ * 
+ * https://github.com/Highpoint2000/Extended-Description-plugin-MOD-by-Highpoint-
+ *
+ *
  * ************************************************
  *
  * This script extends the functionality of the FM-DX 
  * Webserver description system by adding a markdown description
- * and integrating it in the UI.
+ * and integrating it into the UI.
  *
  * You can edit your own description by using markdown.
  * Images are also supported
@@ -16,15 +20,13 @@
  * ************************************************
  */
 
-
 /* SETTINGS (FEEL FREE TO EDIT THESE) */
 const INFO_BUTTON_NAME = "MORE INFO";
-const INFO_TITLE = 'About my server'
-const INFO_CONTENT = 
-`
+const INFO_TITLE = 'About my server';
+const INFO_CONTENT = `
 Welcome to my server!  
 Plugin powered by [FMDX.org](https://fmdx.org).  
-I recommend to change this text. You can use the Markdown language.  
+I recommend changing this text. You can use Markdown language.  
   
 ### Heading test
 Bold text example: **Wooo, I'm bold!**
@@ -35,7 +37,7 @@ Bold text example: **Wooo, I'm bold!**
 `;
 
 /* PLUGIN DECLARATIONS */
-var eDesc = {
+const eDesc = {
     openModal: ExtendedDescOpenModal,
     closeModal: ExtendedDescCloseModal,
     init: ExtendedDescInitialize,
@@ -45,8 +47,17 @@ var eDesc = {
 
 const extendedDescButton = $('<button>', {
     id: 'extended-desc-button',
-    html: '<strong>'+ INFO_BUTTON_NAME + '</strong>',
+    html: `<strong>${INFO_BUTTON_NAME}</strong>`,
     'aria-label': INFO_BUTTON_NAME.toLowerCase(),
+    class: 'hide-phone bg-color-2',
+    css: {
+        borderRadius: '0px',
+        width: '100px',
+        position: 'relative',
+        marginTop: '16px',
+		
+        right: '0px'
+    }
 });
 
 const extendedDescCloseButton = $('<button>', {
@@ -83,50 +94,45 @@ const extendedDescModal = $('<div>', {
         borderRadius: '15px',
         transition: '0.3s ease-in-out opacity'
     },
-    html: '<h1 style="font-size: 32px;font-weight: 300;text-transform: initial;" class="top-10">' + INFO_TITLE + '</h1>'
+    html: `<h1 style="font-size: 32px;font-weight: 300;text-transform: initial;" class="top-10">${INFO_TITLE}</h1>`
 });
 
-
 function ExtendedDescInitialize() {
-    // Add classes and styles
-    extendedDescButton.addClass('hide-phone bg-color-3')
-                      .css({
-                          borderRadius: '0px',
-                          width: '100px',
-                          height: '23px',
-                          position: 'relative',
-                          marginTop: '16px',
-                          right: '0px'
-                      });
-
-    // Append the button to the wrapper
-    const wrapperElement = $('.tuner-info');
-    if (wrapperElement.length) {
-        const buttonWrapper = $('<div>').addClass('button-wrapper');
-        buttonWrapper.append(extendedDescButton);
-        wrapperElement.append(buttonWrapper);
-    }
-
-    const extendedDescContent = $('<div class="extended-desc-content text-left" style="overflow: auto; max-height: 380px; padding: 20px;border-bottom: 1px var(--color-4) dashed"></div>');
-    extendedDescModal.append(extendedDescContent)
-    extendedDescContent.append(eDesc.parseMarkdown(INFO_CONTENT));
+	
+	const extendedDescContent = $('<div class="extended-desc-content text-left" style="overflow: auto; max-height: 380px; padding: 20px; border-bottom: 1px var(--color-4) dashed"></div>');
+    extendedDescModal.append(extendedDescContent);
+    extendedDescContent.html(eDesc.parseMarkdown(INFO_CONTENT));
     extendedDescModal.append(extendedDescCloseButton);
     $('.modal').append(extendedDescModal);
+	
+    setTimeout(() => {
+        const buttonWrapper = document.getElementById('button-wrapper');
+        if (buttonWrapper) {
+			extendedDescButton.css('margin-left', '5px');
+            buttonWrapper.appendChild(extendedDescButton[0]);
+        } else {
+			wrapperElement = $('.tuner-info');
+			if (wrapperElement.length) {
+				const buttonWrapper = $('<div>').addClass('button-wrapper');
+				buttonWrapper.append(extendedDescButton);
+				wrapperElement.append(buttonWrapper);
+				const emptyLine = document.createElement('br');
+				wrapperElement.append(emptyLine);
+			}
+		}	 
+    }, 1000); // 1000 milliseconds = 1 second
 }
+
 
 /* HELPERS */
 function ExtendedDescOpenModal(panel) {
-    eDesc.modalWindow.css("display", "block");
-    panel.css("display", "block");
-    panel.css("opacity", 1);
-    setTimeout(function() {
-        eDesc.modalWindow.css("opacity", 1);
-    }, 10);
+    eDesc.modalWindow.show().css("opacity", 1);
+    panel.show().css("opacity", 1);
 }
 
 function ExtendedDescCloseModal(panel) {
     panel.css("opacity", 0);
-    setTimeout(function() {
+    setTimeout(() => {
         panel.hide();
         eDesc.modalWindow.hide();
     }, 300);
@@ -142,10 +148,10 @@ function ExtendedDescParseMarkdown(markdownText) {
     markdownText = markdownText.replace(/^###### (.*$)/gim, '<h6>$1</h6>');
 
     // Convert bold text
-    markdownText = markdownText.replace(/\*\*(.*)\*\*/gim, '<b>$1</b>');
+    markdownText = markdownText.replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>');
 
     // Convert italic text
-    markdownText = markdownText.replace(/\*(.*)\*/gim, '<i>$1</i>');
+    markdownText = markdownText.replace(/\*(.*?)\*/gim, '<i>$1</i>');
 
     // Convert images
     markdownText = markdownText.replace(/!\[(.*?)\]\((.*?)\)/gim, "<img alt='$1' src='$2' style='max-width: 100%'");
@@ -173,5 +179,4 @@ $(document).ready(function() {
             eDesc.closeModal(extendedDescModal);
         }
     });
-    
 });
