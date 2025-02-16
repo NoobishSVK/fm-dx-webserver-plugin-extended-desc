@@ -1,7 +1,7 @@
 // Plugin configuration, this is used in the administration when plugins are loaded
 var pluginConfig = {
     name: 'Extended description',
-    version: '1.0',
+    version: '1.0.1',
     author: 'NoobishSVK',
     frontEndPath: 'extended-desc/frontend.js'
 }
