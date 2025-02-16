@@ -41,20 +41,6 @@ const eDesc = {
     modalWindow: $('.modal')
 };
 
-const extendedDescButton = $('<button>', {
-    id: 'extended-desc-button',
-    html: `<strong>${INFO_BUTTON_NAME}</strong>`,
-    'aria-label': INFO_BUTTON_NAME.toLowerCase(),
-    class: 'hide-phone bg-color-2',
-    css: {
-        borderRadius: '0px',
-        width: '100px',
-        position: 'relative',
-        marginTop: '16px',
-        right: '0px'
-    }
-});
-
 const extendedDescCloseButton = $('<button>', {
     class: 'modal-panel-extended-desc-close',
     css: {
@@ -100,21 +86,13 @@ function ExtendedDescInitialize() {
     $('.modal').append(extendedDescModal);
     
     setTimeout(function() {
-        const buttonWrapper = $('#button-wrapper');
-        if (buttonWrapper.length) {
-            extendedDescButton.css('margin-left', '5px');
-            buttonWrapper.append(extendedDescButton);
-        } else {
-            const wrapperElement = $('.tuner-info');
-            if (wrapperElement.length) {
-                const buttonWrapper = $('<div>').addClass('button-wrapper');
-                buttonWrapper.append(extendedDescButton);
-                wrapperElement.append(buttonWrapper);
-                const emptyLine = $('<br>');
-                wrapperElement.append(emptyLine);
-            }
-        }
-    }, 1000); // 1000 milliseconds = 1 second
+        addIconToPluginPanel("extended-desc-button", "More info", "solid", "circle-info", "More information about the server");
+
+        const extendedDescButton = $('#extended-desc-button');
+        extendedDescButton.on('click', function() {
+            eDesc.openModal(extendedDescModal);
+        });
+    }, 1000)
 }
 
 /* HELPERS */
@@ -161,9 +139,6 @@ function ExtendedDescParseMarkdown(markdownText) {
 $(document).ready(function() {
     eDesc.init();
 
-    extendedDescButton.on('click', function() {
-        eDesc.openModal(extendedDescModal);
-    });
     extendedDescCloseButton.on('click', function() {
         eDesc.closeModal(extendedDescModal);
     });
